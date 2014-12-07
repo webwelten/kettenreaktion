@@ -5,28 +5,39 @@
 var Game = (function Main() {
     "use strict";
 
-    var Game = {};
+    var Game = {},
+        $gameCanvas = $("#game-canvas"),
+        stats = new Stats();
 
-    var FPS = 33;
-    Game.canvas = document.getElementById('game-canvas');
-    Game.canvas.width = parseFloat($("#game-canvas").css('width'));
-    Game.canvas.height = parseFloat($("#game-canvas").css('height'));
-
+    // init game canvas
+    // set dimensions programmatically to have it responsive
+    Game.canvas = $gameCanvas[0];
+    Game.canvas.width = parseFloat($gameCanvas.css('width'));
+    Game.canvas.height = parseFloat($gameCanvas.css('height'));
     Game.ctx = Game.canvas.getContext('2d');
-    Game.MouseHandler = $('#controls');
-    Game.clock = new Date();
 
-    Game.stats = new Stats();
-    $("#fps-stats").append(Game.stats.domElement);
+    /**
+     * the element we're placing our input listeners on
+     * @type {*|jQuery|HTMLElement}
+     */
+    Game.$controls = $('#controls');
+
+    // init stats
+    $("#fps-stats").append(stats.domElement);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    Game.userName = "Michael";
+    /**
+     * TODO: get the highscore from db
+     * @type {number}
+     */
     Game.highscore = 0;
-    Game.started = false;
-    Game.collidedBalls = [];
 
-    Game.notification = [];
+    /**
+     * holds the ball objects already collided
+     * @type {Array}
+     */
+    Game.collidedBalls = [];
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -37,28 +48,25 @@ var Game = (function Main() {
         resetGame();
         initLevel();
 
-        updateLoop();
-        drawLoop();
+        mainLoop();
     };
 
     /**
-     *
+     * setup new game
      */
     function resetGame() {
-
         Game.score = 0;
         Game.level = 1;
         Game.lives = 5;
-        Game.one_up = 0;
     }
 
     /**
-     *
+     * init new level depending on current skills
      */
     function initLevel() {
 
         Game.millisecs = 0;
-        Game.deltaTime = Game.clock.getTime();
+        Game.deltaTime = new Date().getTime();
         Game.frameCount = 0;
 
         Game.newScore = 0;
@@ -72,8 +80,6 @@ var Game = (function Main() {
         for (var i = 1; i < Game.ballsCount ;i++) {
             Game.balls[i] = new Ball();
         }
-
-        Game.notification.length = 0;
 
         // COLLISION
         Ball.period = 6000 - 200 * Game.level;
@@ -94,42 +100,29 @@ var Game = (function Main() {
     /**
      *
      */
-    function updateLoop() {
+    function mainLoop() {
 
-        Game.clock = new Date();
-        Game.millisecs = Game.clock.getTime();
+        Game.millisecs = new Date().getTime();
         Game.frameCount++;
 
         Game.deltaTime = (Game.millisecs - Game.lastTimestamp)/1000;
         Game.lastTimestamp = Game.millisecs;
 
-        for (var i = 0; i<Game.ballsCount; i++) {
-            if (Game.balls[i].isAlive) {
-                Game.balls[i].update();
-            }
-        }
-
-        setTimeout(updateLoop, 1000/FPS);
-    }
-
-    /**
-     *
-     */
-    function drawLoop() {
-        Game.stats.begin();
-        window.requestAnimFrame(drawLoop);
+        stats.begin();
 
         Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
         Game.ctx.globalAlpha = '1.0';
 
         for (var i = 0; i<Game.ballsCount; i++) {
             if (Game.balls[i].isAlive) {
+                Game.balls[i].update();
                 Game.balls[i].draw();
             }
         }
 
         CollisionBox.draw();
-        Game.stats.end();
+        stats.end();
+        window.requestAnimFrame(mainLoop);
     }
 
     return Game;
