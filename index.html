@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <!--<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" />-->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" />
     <meta charset="UTF-8">
     <meta name="author" content="Michael Abt" />
 
@@ -11,6 +10,12 @@
 
     <style type="text/css">
     <!--
+
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
 
     html, body {
       height: 100%;
@@ -22,38 +27,43 @@
       color: #FFF;
       background: #99B3CE;
     }
-    
-    #outer {
-      position: relative;
-      width: 90%;
-      height: 90%;
+
+    #main {
+      -ms-touch-action: none;
+      width: 100%;
+      height: 100%;
       max-width: 960px;
       margin: 0 auto;
       padding: 5%;
       background: #5C7591;
     }
-    
-    #game-canvas {
+
+    #canvas-holder {
       position: relative;
       width: 100%;
       height: 100%;
-      
+    }
+
+    #game-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
       background: #FFF;
     }
 
     #controls {
-
-      -ms-touch-action: none;
-      position: absolute;
-
-      top: 10px;
-      left: 10px;
+      position: absolute; /* to get the mouse coordinates relative to canvas */
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
 
       z-index: 100;
-
-      width: 100%;
-      height: 100%;
     }
+
     -->
     </style>
 
@@ -64,12 +74,16 @@
 
   <body>
 
-    <div id="outer">
-      <canvas id="game-canvas"></canvas>
-      <div id="controls"></div>
+    <div id="main">
+      <div id="canvas-holder">
+
+        <canvas id="game-canvas" width="1" height="1"></canvas>
+        <div id="controls"></div>
+
+      </div>
   	</div>
 
-    <div id="fps-stats"></div>
+    <!-- <div id="fps-stats"></div> -->
 
     <script type="text/javascript" src="js/vendor/zepto.js"></script>
     <script type="text/javascript" src="js/vendor/zepto.event.js"></script>
