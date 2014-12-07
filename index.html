@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Michael Abt" />
+
+    <style type="text/css">
+    <!--
+    
+    body {
+      font-family: sans-serif;
+      color: #FFF;
+      background: #99B3CE;
+    }
+    
+    #outer {
+      position: relative;
+      width: 960px;
+      margin: 0 auto;
+      padding: 10px;
+      background: #5C7591;
+    }
+    
+    #game-canvas {
+      position: relative;
+      width: 800px;
+      height: 500px;
+      
+      background: #FFF;
+    }
+
+    #demo2 {
+
+      position: absolute;
+
+      top: 10px;
+      left: 10px;
+
+      z-index: 100;
+
+      width: 800px;
+      height: 500px;
+    }
+    -->
+    </style>
+
+    <link rel="SHORTCUT ICON" href="favicon.ico" />
+
+    <title>Kettenreaktion</title>
+  </head>
+
+  <body>
+
+    <div id="outer">
+      <canvas id="game-canvas" width="800" height="500"></canvas>
+      <div id="demo2"></div>
+  	</div>
+
+    <div id="FPS_STATS"></div>
+
+    <script type="text/javascript" src="js/MouseHandler.js"></script>
+    <script type="text/javascript" src="js/Stats.js"></script>
+    <script type="text/javascript" src="js/Utility.js"></script>
+
+    <script type="text/javascript" src="js/Game.js"></script>
+
+    <script type="text/javascript" src="js/Collision.js"></script>
+    <script type="text/javascript" src="js/Ball.js"></script>
+    <script type="text/javascript" src="js/StarterBall.js"></script>
+    <script type="text/javascript" src="js/Score.js"></script>
+
+    <script type="text/javascript">
+      Game.init();
+    </script>
+  </body>
+</html>
