@@ -9,12 +9,15 @@ var Game = (function Main() {
 
     var FPS = 33;
     Game.canvas = document.getElementById('game-canvas');
+    Game.canvas.width = parseFloat($("#game-canvas").css('width'));
+    Game.canvas.height = parseFloat($("#game-canvas").css('height'));
+
     Game.ctx = Game.canvas.getContext('2d');
-    Game.MouseHandler = new MouseHandler( document.getElementById('demo2'));
+    Game.MouseHandler = $('#controls');
     Game.clock = new Date();
 
     Game.stats = new Stats();
-    document.getElementById("FPS_STATS").appendChild(Game.stats.domElement);
+    $("#fps-stats").append(Game.stats.domElement);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -95,7 +98,6 @@ var Game = (function Main() {
 
         Game.clock = new Date();
         Game.millisecs = Game.clock.getTime();
-        Game.MouseHandler.update();
         Game.frameCount++;
 
         Game.deltaTime = (Game.millisecs - Game.lastTimestamp)/1000;

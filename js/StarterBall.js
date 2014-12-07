@@ -29,6 +29,37 @@ StarterBall.prototype.reset = function () {
     this.isPlaced = false;
     this.placedDownTime = 0;
     this.alpha = StarterBall.alpha;
+
+    var that = this;
+
+    Game.MouseHandler.one("click tap", function(e) {
+
+        // ball has been placed down
+        that.isPlaced = true;
+
+        // change size
+        that.size = StarterBall.size2;
+        that.sizePow2 = Math.pow(that.size, 2);
+
+        that.placedDownTime = Game.millisecs;
+        that.collisionArrayIndex = Game.collidedBalls.push([that.id]);
+
+        // update CollisionBox
+        CollisionBox.x1 = that.getX();
+        CollisionBox.x2 = that.x+that.size;
+
+        CollisionBox.y1 = that.getY();
+        CollisionBox.y2 = that.y+that.size;
+
+    }).on("mousemove touchmove", function(e) {
+
+        e.preventDefault();
+
+        if (!that.isPlaced) {
+            that.x = e.layerX;
+            that.y = e.layerY;
+        }
+    });
 };
 
 StarterBall.prototype.getX = function() {
@@ -54,35 +85,7 @@ StarterBall.prototype.draw = function () {
  */
 StarterBall.prototype.update = function () {
 
-    if (!this.isAlive) {
-        return;
-    }
-
-    if (!this.isPlaced) {
-        this.x = Game.MouseHandler.x;
-        this.y = Game.MouseHandler.y;
-
-        if (Game.MouseHandler.mousehit) {
-            // ball has been placed down
-            this.isPlaced = true;
-
-            // change size
-            this.size = StarterBall.size2;
-            this.sizePow2 = Math.pow(this.size, 2);
-
-            this.placedDownTime = Game.millisecs;
-            this.collisionArrayIndex = Game.collidedBalls.push([this.id]);
-
-            // update CollisionBox
-            CollisionBox.x1 = this.getX();
-            CollisionBox.x2 = this.x+this.size;
-
-            CollisionBox.y1 = this.getY();
-            CollisionBox.y2 = this.y+this.size;
-        }
-
-    } else {
-
+    if (this.isPlaced) {
         // render ball as long as period lasts
         // if over stop colliding with moving balls
         // and set isAlive = false to prevent from rendering
