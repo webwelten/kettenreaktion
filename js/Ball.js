@@ -54,10 +54,9 @@ Ball.prototype.reset = function () {
     // random position and direction
     this.x = Ball.size + 5 + Math.round((Math.random()*( Game.canvas.width -Ball.size-20) ));
     this.y = Ball.size + 5 + Math.round((Math.random()*( Game.canvas.height-Ball.size-20) ));
-    this.direction = Math.random()*360;
-    this.oldDirection = 0;
-    this.directionX = Math.round(Math.cos(this.direction)*10)/10;
-    this.directionY = Math.round(Math.sin(this.direction)*10)/10;
+    this.direction = +(Math.random()*360).toFixed(2);
+    this.directionX = +(Math.cos(this.direction)).toFixed(2);
+    this.directionY = +(Math.sin(this.direction)).toFixed(2);
 
     // random color
     this.color = Ball.colorsRGB[0 + Math.round(Math.random()*5)];
@@ -109,7 +108,6 @@ Ball.prototype.update = function () {
 
         // 1. check: is ball rect in CollisionBox rect
         if (
-            Game.frameCount % 2 == 0 &&
             this.speed > 0
             &&
             Collision.rectsOverlap(
@@ -191,28 +189,16 @@ Ball.prototype.update = function () {
  */
 Ball.prototype.checkWallCollision = function() {
 
+    // check left and right wall
     if (this.x <= 0 + this.size || this.x + this.size >= Game.canvas.width) {
-        if (this.oldDirection == 0) {
-            this.oldDirection = this.direction;
-            this.direction = 180-this.direction;
-            this.directionX *= -1;
-        }
+        this.direction = 180-this.direction;
+        this.directionX *= -1;
     }
 
+    // check top and bottom wall
     if (this.y <= 0 + this.size || this.y + this.size >= Game.canvas.height) {
-        if (this.oldDirection == 0) {
-            this.oldDirection = this.direction;
-            this.direction = -this.direction;
-            this.directionY *= -1;
-        }
-    }
-
-    if (
-        this.x > 0 + this.size*2 && this.x + this.size*2 < Game.canvas.width &&
-        this.y > 0 + this.size*2 && this.y + this.size*2 < Game.canvas.height
-    )
-    {
-        this.oldDirection = 0;
+        this.direction = -this.direction;
+        this.directionY *= -1;
     }
 
 };
