@@ -32,7 +32,7 @@ StarterBall.prototype.reset = function () {
 
     var that = this;
 
-    Game.$controls.one("click tap", function(e) {
+    Game.$controls.one("click", function(e) {
 
         // ball has been placed down
         that.isPlaced = true;
